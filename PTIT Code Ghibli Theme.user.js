@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2025-03-30
 // @description  Custom theme for PTIT Code platform
-// @author       You
+// @author       Dang Duong Coder
 // @match        https://code.ptit.edu.vn/beta/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=edu.vn
 // @grant        GM_addStyle
@@ -15,7 +15,6 @@
     'use strict';
 
     const customCSS = `
-        /* Thêm CSS của bạn ở đây */
         body {
             background-image: url(https://raw.githubusercontent.com/dangduongcoder/tampermonkey_script/refs/heads/main/assets/images/bg-ghibli.webp)!important;
             background-position: center top;
@@ -155,34 +154,27 @@
     GM_addStyle(customCSS);
 
     function processElements() {
-        const elements = document.getElementsByClassName('nav-item');
-        for (let element of elements) {
-            if (element.hasAttribute('style')) {
+        const classNames = ['nav-item', 'collapse-options', 'ant-card'];
+        classNames.forEach(className => {
+            const elements = document.getElementsByClassName(className);
+            Array.from(elements).forEach(element => {
+                if (element.hasAttribute('style')) {
+                    element.removeAttribute('style');
+                }
+            });
+        });
+
+        const xpaths = [
+            "//*[@id='app']/div/div/div/div[1]/div/div[2]/div[3]/div/div/div/div/div/div/table/tbody/tr[1]/td[2]/a"
+        ];
+        
+        xpaths.forEach(xpath => {
+            const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+            const element = result.singleNodeValue;
+            if (element && element.hasAttribute('style')) {
                 element.removeAttribute('style');
             }
-        }
-
-        const collapseOptions = document.getElementsByClassName('collapse-options');
-        for (let element of collapseOptions) {
-            if (element.hasAttribute('style')) {
-                element.removeAttribute('style');
-            }
-        }
-
-        const antCard = document.getElementsByClassName('ant-card');
-        for (let element of antCard) {
-            if (element.hasAttribute('style')) {
-                element.removeAttribute('style');
-            }
-        }
-
-        const xpath = "//*[@id='app']/div/div/div/div[1]/div/div[2]/div[3]/div/div/div/div/div/div/table/tbody/tr[1]/td[2]/a";
-        const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-        const element = result.singleNodeValue;
-        if (element && element.hasAttribute('style')) {
-            element.removeAttribute('style');
-            console.log("Đã xóa thuộc tính style của element theo XPath");
-        }
+        });
     }
 
     function init() {
