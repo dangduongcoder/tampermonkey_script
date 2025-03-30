@@ -14,7 +14,6 @@
 (function() {
     'use strict';
 
-    // Thêm CSS vào trang web
     const customCSS = `
         /* Thêm CSS của bạn ở đây */
         body {
@@ -153,12 +152,9 @@
         }
     `;
 
-    // Inject CSS vào trang web
     GM_addStyle(customCSS);
 
-    // Hàm xử lý các elements
     function processElements() {
-        // Xử lý nav-item
         const elements = document.getElementsByClassName('nav-item');
         for (let element of elements) {
             if (element.hasAttribute('style')) {
@@ -166,7 +162,6 @@
             }
         }
 
-        // Xử lý collapse-options
         const collapseOptions = document.getElementsByClassName('collapse-options');
         for (let element of collapseOptions) {
             if (element.hasAttribute('style')) {
@@ -181,7 +176,6 @@
             }
         }
 
-        // Xử lý element theo XPath
         const xpath = "//*[@id='app']/div/div/div/div[1]/div/div[2]/div[3]/div/div/div/div/div/div/table/tbody/tr[1]/td[2]/a";
         const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
         const element = result.singleNodeValue;
@@ -191,28 +185,22 @@
         }
     }
 
-    // Hàm chạy sau khi trang web đã load xong
     function init() {
-        // Tạo MutationObserver để theo dõi các thay đổi trong DOM
         const observer = new MutationObserver((mutations) => {
             processElements();
         });
 
-        // Cấu hình observer
         const config = {
-            childList: true, // Theo dõi thêm/xóa nodes
-            subtree: true,   // Theo dõi cả các nodes con
-            attributes: true // Theo dõi thay đổi thuộc tính
+            childList: true, 
+            subtree: true,   
+            attributes: true 
         };
 
-        // Bắt đầu theo dõi
         observer.observe(document.body, config);
 
-        // Chạy lần đầu để xử lý các elements đã có
         processElements();
     }
 
-    // Chờ cho đến khi trang web load xong
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
